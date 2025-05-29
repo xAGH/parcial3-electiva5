@@ -1,0 +1,12 @@
+[submodule "get"]
+	path = get
+	url = https://github.com/xAGH/parcial3-electiva5-get-ms
+[submodule "post"]
+	path = post
+	url = https://github.com/xAGH/parcial3-electiva5-post-ms
+[submodule "patch"]
+	path = patch
+	url = https://github.com/xAGH/parcial3-electiva5-patch-ms
+[submodule "delete"]
+	path = delete
+	url = https://github.com/xAGH/parcial3-electiva5-delete-ms

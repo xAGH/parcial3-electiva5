@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "7f1b3b89-e698-4a64-9dd9-826f92b97b38",
+		"name": "TaskManager - Electiva V - Parcial III",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27377737"
+	},
+	"item": [
+		{
+			"name": "Get All Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{get-url}}/api/tasks",
+					"host": [
+						"{{get-url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{get-url}}/api/tasks/:id",
+					"host": [
+						"{{get-url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sacar la basura\",\r\n    \"description\": \"Sacar la basura\",\r\n    \"status\": \"IN_PROGRESS\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{post-url}}/api/tasks",
+					"host": [
+						"{{post-url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sacar la basura otra vez\",\r\n    \"description\": \"Sacar la basura\",\r\n    \"status\": \"IN_PROGRESS\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{patch-url}}/api/tasks/:id",
+					"host": [
+						"{{patch-url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{delete-url}}/api/tasks/:id",
+					"host": [
+						"{{delete-url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "get-url",
+			"value": "localhost:8081",
+			"type": "default"
+		},
+		{
+			"key": "post-url",
+			"value": "localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "patch-url",
+			"value": "localhost:8083",
+			"type": "string"
+		},
+		{
+			"key": "delete-url",
+			"value": "localhost:8084",
+			"type": "string"
+		}
+	]
+}
