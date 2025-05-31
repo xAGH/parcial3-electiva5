@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delete-microservice
+  labels:
+    app: delete-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delete-microservice
+  template:
+    metadata:
+      labels:
+        app: delete-microservice
+    spec:
+      containers:
+        - name: delete-microservice
+          image: xagh/agiraldog-parcial3-electiva5-delete-ms:latest
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mariadb://146.190.199.15:32000/taskdb"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_PASSWORD
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "none"
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: "org.hibernate.dialect.MariaDBDialect"
+            - name: SPRING_JPA_SHOW_SQL
+              value: "true"
+            - name: SERVER_PORT
+              value: "8084"

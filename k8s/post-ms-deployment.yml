@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-microservice
+  labels:
+    app: post-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-microservice
+  template:
+    metadata:
+      labels:
+        app: post-microservice
+    spec:
+      containers:
+        - name: post-microservice
+          image: xagh/agiraldog-parcial3-electiva5-post-ms:latest
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mariadb://146.190.199.15:32000/taskdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+
+            # Contraseña extraída del Secret "postgres-secret" (clave: POSTGRES_PASSWORD)
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_PASSWORD
+
+            # Hibernate DDL (puedes poner "update", "create", etc., según tu necesidad)
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "none"
+
+            # Dialecto de PostgreSQL para Hibernate
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: "org.hibernate.dialect.PostgreSQLDialect"
+
+            # Mostrar SQL en consola
+            - name: SPRING_JPA_SHOW_SQL
+              value: "true"
+
+            # Puerto en el que arranca Spring Boot (coincide con server.port en application.properties)
+            - name: SERVER_PORT
+              value: "8082"

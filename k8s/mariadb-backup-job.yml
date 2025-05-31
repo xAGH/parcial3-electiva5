@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mariadb-backup
+  namespace: default
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - name: mariadb-backup
+        image: mariadb:10.11
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            # Espera a que el servicio MariaDB esté listo
+            until mysqladmin ping -h mariadb -u root -p"$MYSQL_ROOT_PASSWORD" --silent; do
+              echo "Esperando a que MariaDB esté listo..."
+              sleep 5
+            done
+
+            echo "=== Iniciando backup de todas las bases de datos ==="
+            mysqldump \
+              -h mariadb \
+              -u root \
+              -p"$MYSQL_ROOT_PASSWORD" \
+              --all-databases \
+              > /backup/backup.sql
+
+            echo "=== Backup completado en /backup/backup.sql ==="
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-secret
+              key: MARIA_PASSWORD         # <-- Aquí debe ir "MARIA_PASSWORD", que coincide con tu Secret
+        volumeMounts:
+        - name: backup-volume
+          mountPath: /backup
+      restartPolicy: Never
+      volumes:
+      - name: backup-volume
+        persistentVolumeClaim:
+          claimName: mariadb-backup-pvc

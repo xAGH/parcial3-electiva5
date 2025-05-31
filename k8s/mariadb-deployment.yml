@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_DB
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_PASSWORD
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: MARIA_PASSWORD
+          volumeMounts:
+            # Volumen principal de datos
+            - name: mariadb-storage
+              mountPath: /var/lib/mariadb/data
+
+            # Backup SQL como init script (solo se ejecuta si /var/lib/mariadb/data está vacío)
+            - name: backup-volume
+              mountPath: /docker-entrypoint-initdb.d
+
+      volumes:
+        # PVC de datos existente
+        - name: mariadb-storage
+          persistentVolumeClaim:
+            claimName: mariadb-pvc
+
+        # PVC donde el Job deposita backup.sql
+        - name: backup-volume
+          persistentVolumeClaim:
+            claimName: mariadb-backup-pvc
